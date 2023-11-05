@@ -3,7 +3,7 @@ import csv
 
 def main():
     print('''
-    Welcome to Priority Task Pro!
+    \033[0m Welcome to Priority Task Pro! \033[0m
 
 
     We will ask you a few questions while you insert tasks to better understand the importance and urgency.
@@ -18,7 +18,7 @@ def navigation():
 
     options = [inquirer.List( 
         "main_nav",
-        message="Select Action:",
+        message=" \033[1m Select Action: \033[0m ",
         choices=["View Tasks", "Add Task", "Complete Task", "Update Task", "Exit"])]
 
     user_choice = inquirer.prompt(options)['main_nav']
@@ -53,7 +53,7 @@ def add_task():
     task =[]
     #Step 1 Title
     print('''
-    Add Task
+    \033[1m  Add Task \033[0m 
 
     Step 1/4
 
@@ -61,26 +61,26 @@ def add_task():
     the task, ex. Laundry, Assignment 6, Wash Car, ect... Write out your title
     and press enter to move on to the next step.
     ''')
-    task_prompt = [inquirer.Text("title", message="Input Task Title: ")]
+    task_prompt = [inquirer.Text("title", message="\033[1m  Input Task Title: \033[0m ")]
     task_title = inquirer.prompt(task_prompt)["title"]
     task.append(task_title)
 
     #Step 2 Due_Date
     print('''
-    Add Task
+    033[1m  Add Task \033[0m 
 
     Step 2/4
 
     Please enter the Due Date of you task. When does this task
     need to be completed by?
     ''')
-    task_prompt = [inquirer.Text("Due_Date", message="Input Task Due Date (MM-DD-YYY): ")]
+    task_prompt = [inquirer.Text("Due_Date", message="\033[1m Input Task Due Date (MM-DD-YYY):\033[0m  ")]
     task_Due_Date = inquirer.prompt(task_prompt)["Due_Date"]
     task.append(task_Due_Date)
 
     #Step 3 Urgency
     print('''
-    Add Task
+    033[1m  Add Task \033[0m 
 
     Step 3/4
 
@@ -89,14 +89,14 @@ def add_task():
     and 10 being of the highest importance.
     Enter the value and press enter.
     ''')
-    task_prompt = [inquirer.Text("Importance", message="Input Task Importance (1-10): ")]
+    task_prompt = [inquirer.Text("Importance", message="\033[1m Input Task Importance (1-10): \033[0m  ")]
     task_Importance = inquirer.prompt(task_prompt)["Importance"]
     task.append(task_Importance)
 
 
     #Step 4 Urgency
     print('''
-    Add Task
+    A033[1m  Add Task \033[0m 
 
     Step 4/4
 
@@ -104,7 +104,7 @@ def add_task():
     1 being not urgent and 10 being the highest urgency.
     Input value and press Enter.
     ''')
-    task_prompt = [inquirer.Text("Urgency", message="Input Task Urgency (1-10): ")]
+    task_prompt = [inquirer.Text("Urgency", message="\033[1m Input Task Urgency (1-10): \033[0m ")]
     task_Urgency = inquirer.prompt(task_prompt)["Urgency"]
     task.append(task_Urgency)
 
@@ -116,7 +116,7 @@ def add_task():
     
     #Add Task Nav
     print('''
-    Task Added!
+    \033[1m Task Added! \033[0m 
 
     Your task was added successfully, use the arrow
     keys to select your next action.
@@ -141,7 +141,7 @@ def complete_task():
     #View Tasks Nav
     options = [inquirer.List( 
         "complete_task",
-        message="Select Action:",
+        message="\033[1m Select Action: \033[0m ",
         choices = tasks
         )]
 
@@ -154,7 +154,7 @@ def complete_task():
 
     #Task Completed
     print('''
-    Task Completed!
+    \033[1m Task Completed! \033[0m 
 
     Your task was completed successfully, use the arrow
     keys to select your next action.    
@@ -172,7 +172,7 @@ def update_task():
     #Update Tasks Nav
     options = [inquirer.List( 
         "update_task",
-        message="Select Action:",
+        message="\033[1m  Select Action: \033[0m ",
         choices = tasks
         )]
 
@@ -181,7 +181,7 @@ def update_task():
     #Edit
     #Step 1 Title
     print('''
-    Update Task
+    \033[1m Update Task \033[0m 
 
     Step 1/4
 
@@ -189,13 +189,13 @@ def update_task():
     press enter to leave it the same or change it 
     and press enter to save and move to the next step.
     ''')
-    task_prompt = [inquirer.Text("title", default = user_choice[0], message="Input Task Title: ")]
+    task_prompt = [inquirer.Text("title", default = user_choice[0], message="\033[1m Input Task Title: \033[0m  ")]
     task_title = inquirer.prompt(task_prompt)["title"]
     user_choice[0] = task_title
 
     #Step 2 Due_Date
     print('''
-    Add Task
+    \033[1m Update Task \033[0m 
 
     Step 2/4
 
@@ -203,13 +203,13 @@ def update_task():
     press enter to leave it the same or change it 
     and press enter to save and move to the next step.  
     ''')
-    task_prompt = [inquirer.Text("Due_Date", default = user_choice[1], message="Input Task Due Date (MM-DD-YYY): ")]
+    task_prompt = [inquirer.Text("Due_Date", default = user_choice[1], message="\033[1m Input Task Due Date (MM-DD-YYY): \033[0m")]
     task_Due_Date = inquirer.prompt(task_prompt)["Due_Date"]
     user_choice[1] = task_Due_Date
 
     #Step 3 Urgency
     print('''
-    Add Task
+    \033[1m Update Task \033[0m 
 
     Step 3/4
 
@@ -217,14 +217,14 @@ def update_task():
     press enter to leave it the same or change it 
     and press enter to save and move to the next step.
     ''')
-    task_prompt = [inquirer.Text("Importance",default = user_choice[2], message="Input Task Importance (1-10): ")]
+    task_prompt = [inquirer.Text("Importance",default = user_choice[2], message="\033[1m Input Task Importance (1-10): \033[0m")]
     task_Importance = inquirer.prompt(task_prompt)["Importance"]
     user_choice[2] = task_Importance
 
 
     #Step 4 Urgency
     print('''
-    Add Task
+    \033[1m Update Task \033[0m 
 
     Step 4/4
 
@@ -232,7 +232,7 @@ def update_task():
     press enter to leave it the same or change it 
     and press enter to save and move to the next step.
     ''')
-    task_prompt = [inquirer.Text("Urgency",default = user_choice[3], message="Input Task Urgency (1-10): ")]
+    task_prompt = [inquirer.Text("Urgency",default = user_choice[3], message="\033[1m Input Task Urgency (1-10): \033[0m ")]
     task_Urgency = inquirer.prompt(task_prompt)["Urgency"]
     user_choice[3] = task_Urgency
 
@@ -244,7 +244,7 @@ def update_task():
     
     #Add Task Nav
     print('''
-    Task Added!
+    \033[1m Task Added! \033[0m
 
     Your task was updated successfully, use the arrow
     keys to select your next action.
