@@ -45,7 +45,7 @@ def navigation():
         print("Please make a selection")
 
 def view_tasks():
-    print("\033[1m Task List \033[0m")
+    print(" \033[1m Task List \033[0m")
 
     #Read CSV
     with open('csvfile.csv', 'r') as f:
@@ -61,7 +61,7 @@ def add_task():
     task =[]
     #Step 1 Title
     print('''
-    \033[1m  Add Task \033[0m 
+    \033[1m Add Task \033[0m 
 
     Step 1/4
 
@@ -75,7 +75,7 @@ def add_task():
 
     #Step 2 Due_Date
     print('''
-    033[1m  Add Task \033[0m 
+    033[1m Add Task \033[0m 
 
     Step 2/4
 
@@ -88,7 +88,7 @@ def add_task():
 
     #Step 3 Urgency
     print('''
-    033[1m  Add Task \033[0m 
+    033[1m Add Task \033[0m 
 
     Step 3/4
 
@@ -104,7 +104,7 @@ def add_task():
 
     #Step 4 Urgency
     print('''
-    A033[1m  Add Task \033[0m 
+    A033[1m Add Task \033[0m 
 
     Step 4/4
 
