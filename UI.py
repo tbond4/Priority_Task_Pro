@@ -3,7 +3,7 @@ import csv
 
 def main():
     print('''
-    \033[0m Welcome to Priority Task Pro! \033[0m
+    \033[1m Welcome to Priority Task Pro! \033[0m
 
 
     We will ask you a few questions while you insert tasks to better understand the importance and urgency.
@@ -11,6 +11,14 @@ def main():
     already entered. Use the Navigation menu below using the arrows keys on your keyboard, 
     when the option you want is highlighted, press enter to select.
     ''')
+    print(
+        '''
+        ---------------------------------------------------------
+        \033[1m New Feature \033[0m
+        Its all new but this is where I would tell you about it!
+        ---------------------------------------------------------
+        '''
+    )
     navigation()
 
  
@@ -37,7 +45,7 @@ def navigation():
         print("Please make a selection")
 
 def view_tasks():
-    print("Task List")
+    print("\033[1m Task List \033[0m")
 
     #Read CSV
     with open('csvfile.csv', 'r') as f:
