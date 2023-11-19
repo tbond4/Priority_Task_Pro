@@ -1,5 +1,6 @@
 import inquirer
 import csv
+import time
 
 def main():
     print('''
@@ -44,15 +45,35 @@ def navigation():
     else:
         print("Please make a selection")
 
+def prioritize_tasks(tasks):
+    prioritied_tasks = []
+    with open('../CS-361-Task-List-Microservice/tasks.txt','w') as f:
+        for line in tasks:
+            writer = csv.writer(f)
+            writer.writerow(line)
+    time.sleep(1)
+    # Read priority
+    with open('../CS-361-Task-List-Microservice/prioritized_tasks.txt','r') as f:
+        csv_reader = csv.reader(f)
+        for line in csv_reader:
+            prioritied_tasks.append(line)
+    return(prioritied_tasks)
+
+
 def view_tasks():
     print(" \033[1m Task List \033[0m")
-
+    tasks =[]
+    title = ["Priority score", "Task"]
     #Read CSV
     with open('csvfile.csv', 'r') as f:
         csv_reader = csv.reader(f)
         for line in csv_reader:
-            print(line)
-
+            tasks.append(line)
+    print("Prioritizing in progress...")
+    prioritized_tasks = prioritize_tasks(tasks)
+    print(title)
+    for task in prioritized_tasks:
+        print(task)
     navigation()
 
 
@@ -82,13 +103,13 @@ def add_task():
     Please enter the Due Date of you task. When does this task
     need to be completed by?
     ''')
-    task_prompt = [inquirer.Text("Due_Date", message="\033[1m Input Task Due Date (MM-DD-YYY):\033[0m  ")]
+    task_prompt = [inquirer.Text("Due_Date", message="\033[1m Input Task Due Date (MM-DD-YYYY):\033[0m  ")]
     task_Due_Date = inquirer.prompt(task_prompt)["Due_Date"]
     task.append(task_Due_Date)
 
-    #Step 3 Urgency
+    #Step 3 Importance
     print('''
-    033[1m Add Task \033[0m 
+    \033[1m Add Task \033[0m 
 
     Step 3/4
 
@@ -104,7 +125,7 @@ def add_task():
 
     #Step 4 Urgency
     print('''
-    A033[1m Add Task \033[0m 
+    \A033[1m Add Task \033[0m 
 
     Step 4/4
 
@@ -130,9 +151,6 @@ def add_task():
     keys to select your next action.
     ''')
     navigation()
-
-
-
 
 def user_exit():
     print("Exiting Program, your tasks are awaiting!")
