@@ -96,7 +96,7 @@ def add_task():
 
     #Step 2 Due_Date
     print('''
-    033[1m Add Task \033[0m 
+    \033[1m Add Task \033[0m 
 
     Step 2/4
 
