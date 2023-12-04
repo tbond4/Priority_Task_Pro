@@ -2,30 +2,17 @@ import inquirer
 import csv
 import time
 import Steps
+import User_prompts as UP
 
 def main():
-    print('''
-    \033[1m Welcome to Priority Task Pro! \033[0m
-
-
-    We will ask you a few questions while you insert tasks to better understand the importance and urgency.
-    If a task due date changes, no worries, you can always change your answers and update any task you have 
-    already entered. Use the Navigation menu below using the arrows keys on your keyboard, 
-    when the option you want is highlighted, press enter to select.
-    ''')
-    print(
-        '''
-        ---------------------------------------------------------
-        \033[1m New Feature \033[0m
-        Its all new but this is where I would tell you about it!
-        ---------------------------------------------------------
-        '''
-    )
+    """Introduce program and start Navigation"""
+    print(UP.startup)
+    print(UP.new_feature_box)
     navigation()
 
  
 def navigation():   
-
+    """Prompt user with list of actions"""
     options = [inquirer.List( 
         "main_nav",
         message=" \033[1m Select Action: \033[0m ",
@@ -50,13 +37,17 @@ def navigation():
 
 
 def prioritize_tasks(tasks):
+    """Use Microservice to get priority scores in oreded list"""
     prioritied_tasks = []
+
+    # Send Task List
     with open('../CS-361-Task-List-Microservice/tasks.txt','w') as f:
         for line in tasks:
             writer = csv.writer(f)
             writer.writerow(line)
-    time.sleep(1)
+
     # Read priority
+    time.sleep(1)
     with open('../CS-361-Task-List-Microservice/prioritized_tasks.txt','r') as f:
         csv_reader = csv.reader(f)
         for line in csv_reader:
@@ -65,19 +56,25 @@ def prioritize_tasks(tasks):
 
 
 def view_tasks():
+    """Display current Priortized Task List"""
+
     print(" \033[1m Task List \033[0m")
     tasks =[]
     title = ["Priority score", "Task"]
+
     #Read CSV
     with open('tasks.csv', 'r') as f:
         csv_reader = csv.reader(f)
         for line in csv_reader:
             tasks.append(line)
+
     print("Prioritizing in progress...")
     prioritized_tasks = prioritize_tasks(tasks)
     print(*title, sep=', ')
+
     for task in prioritized_tasks:
         print(*task, sep=', ')
+
     navigation()
 
 
@@ -93,28 +90,24 @@ def add_task():
         task.append(task_data)
 
     #Add Task
-    header = ['title', 'due_date','importance','urgency','priority']
     with open('tasks.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow(task)
-    
-    #Add Task Nav
-    print('''
-    \033[1m Task Added! \033[0m 
 
-    Your task was added successfully, use the arrow
-    keys to select your next action.
-    ''')
+    print(UP.task_added)
     navigation()
 
 
 def user_exit():
-    print("Exiting Program, your tasks are awaiting!")
+    """Exit program"""
+    print(UP.exit_program)
     exit(0)
 
 
 def complete_task():
+    """Removes Task from List"""
     tasks =[]
+
     #Read CSV
     with open('tasks.csv', 'r') as f:
         csv_reader = csv.reader(f)
@@ -135,22 +128,19 @@ def complete_task():
         navigation()
     else:
         tasks.remove(user_choice)
+        tasks.remove("CANCEL")
    
     with open('tasks.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerows(tasks)
 
     #Task Completed
-    print('''
-    \033[1m Task Completed! \033[0m 
-
-    Your task was completed successfully, use the arrow
-    keys to select your next action.    
-    ''')
+    print(UP.task_completed)
     navigation()
 
 
 def delete_task():
+    """Removes Task from List"""
     tasks =[]
     #Read CSV
     with open('tasks.csv', 'r') as f:
@@ -172,19 +162,15 @@ def delete_task():
         navigation()
     else:
         tasks.remove(user_choice)
-
+        tasks.remove("CANCEL")
+   
    
     with open('tasks.csv', 'w') as f:
         writer = csv.writer(f)
         writer.writerows(tasks)
 
     #Task Completed
-    print('''
-    \033[1m Task Deleted! \033[0m 
-
-    Your task was Deleted successfully, use the arrow
-    keys to select your next action.    
-    ''')
+    print(UP.task_deleted)
     navigation()
 
 
@@ -209,77 +195,24 @@ def update_task():
     if user_choice == "CANCEL":
         navigation()
 
-    #Edit
-    #Step 1 Title
-    print('''
-    \033[1m Update Task \033[0m 
+    tasks.remove("CANCEL")
+   
+    Step_dict = Steps.update_task_steps
+    i = 0
+    for step in Step_dict:
+        print(Step_dict[step]["intro"])
+        task_prompt = [inquirer.Text(Step_dict[step]["title"],default = user_choice[i], message=Step_dict[step]["message"])]
+        task_data= inquirer.prompt(task_prompt)[Step_dict[step]["title"]]
+        user_choice[i] = task_data
+        i+=1
 
-    Step 1/4
-
-    Your current task title is pre-filled in for you
-    press enter to leave it the same or change it 
-    and press enter to save and move to the next step.
-    ''')
-    task_prompt = [inquirer.Text("title", default = user_choice[0], message="\033[1m Input Task Title: \033[0m  ")]
-    task_title = inquirer.prompt(task_prompt)["title"]
-    user_choice[0] = task_title
-
-    #Step 2 Due_Date
-    print('''
-    \033[1m Update Task \033[0m 
-
-    Step 2/4
-
-    Your current task Due Date is pre-filled in for you
-    press enter to leave it the same or change it 
-    and press enter to save and move to the next step.  
-    ''')
-    task_prompt = [inquirer.Text("Due_Date", default = user_choice[1], message="\033[1m Input Task Due Date (MM-DD-YYY): \033[0m")]
-    task_Due_Date = inquirer.prompt(task_prompt)["Due_Date"]
-    user_choice[1] = task_Due_Date
-
-    #Step 3 Urgency
-    print('''
-    \033[1m Update Task \033[0m 
-
-    Step 3/4
-
-    Your current task importnace is pre-filled in for you
-    press enter to leave it the same or change it 
-    and press enter to save and move to the next step.
-    ''')
-    task_prompt = [inquirer.Text("Importance",default = user_choice[2], message="\033[1m Input Task Importance (1-10): \033[0m")]
-    task_Importance = inquirer.prompt(task_prompt)["Importance"]
-    user_choice[2] = task_Importance
-
-
-    #Step 4 Urgency
-    print('''
-    \033[1m Update Task \033[0m 
-
-    Step 4/4
-
-    Your current task Urgeency is pre-filled in for you
-    press enter to leave it the same or change it 
-    and press enter to save and move to the next step.
-    ''')
-    task_prompt = [inquirer.Text("Urgency",default = user_choice[3], message="\033[1m Input Task Urgency (1-10): \033[0m ")]
-    task_Urgency = inquirer.prompt(task_prompt)["Urgency"]
-    user_choice[3] = task_Urgency
-
-    #Add Task
-    header = ['title', 'due_date','importance','urgency','priority']
+    # Update Task
     with open('tasks.csv', 'a') as f:
         writer = csv.writer(f)
         writer.writerow(task)
     
-    #Add Task Nav
-    print('''
-    \033[1m Task Added! \033[0m
-
-    Your task was updated successfully, use the arrow
-    keys to select your next action.
-    ''')
+    
+    print(UP.task_updated)
 
     with open('tasks.csv', 'w') as f:
         writer = csv.writer(f)
