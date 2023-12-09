@@ -1,2 +1,3 @@
 TASKSCSV = 'tasks.csv'
-MICROSERVICEFILE = '../CS-361-Task-List-Microservice/prioritized_tasks.txt'
+PRIORITIZEDMICROSERVICEFILE = '../CS-361-Task-List-Microservice/prioritized_tasks.txt'
+MICROSERVICEFILE = '../CS-361-Task-List-Microservice/tasks.txt'

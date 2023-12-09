@@ -14,11 +14,8 @@ def main():
  
 def navigation():   
     """Prompt user with list of actions"""
-    options = [inquirer.List( 
-        "main_nav",
-        message=" \033[1m Select Action: \033[0m ",
-        choices=["View Tasks", "Add Task", "Complete Task", "Update Task", "Delete Task", "Exit"])]
-
+  
+    options = generate_options_list("main_nav", UP.select_action, UP.choiceList)
     user_choice = inquirer.prompt(options)['main_nav']
 
     if user_choice == "View Tasks":
@@ -37,6 +34,7 @@ def navigation():
         print("Please make a selection")
 
 def open_and_read(file):
+    """Opens given file, returns list"""
     tasks =[]
     with open(file, 'r') as f:
         csv_reader = csv.reader(f)
@@ -45,21 +43,25 @@ def open_and_read(file):
     return(tasks)
 
 def open_and_write(file,list):
+    """Opens given file writes list input"""
     with open(file, 'w') as f:
         writer = csv.writer(f)
         writer.writerows(list)
 
+def generate_options_list(title, messageSTR, choiceList):
+    return [inquirer.List( 
+        title,
+        message=messageSTR,
+        choices = choiceList
+        )]
+
 def prioritize_tasks(tasks):
     """Use Microservice to get priority scores in oreded list"""
     # Send Task List
-    with open('../CS-361-Task-List-Microservice/tasks.txt','w') as f:
-        for line in tasks:
-            writer = csv.writer(f)
-            writer.writerow(line)
-
+    open_and_write(constants.MICROSERVICEFILE,tasks)
     # Read priority
     time.sleep(1)
-    return(open_and_read(constants.MICROSERVICEFILE))
+    return(open_and_read(constants.PRIORITIZEDMICROSERVICEFILE))
 
 
 def view_tasks():
@@ -112,12 +114,8 @@ def complete_task():
     tasks.append("CANCEL")
 
     #View Tasks Nav
-    options = [inquirer.List( 
-        "complete_task",
-        message="\033[1m Select Action: \033[0m ",
-        choices = tasks
-        )]
-
+    options = generate_options_list("complete_task", UP.select_action, tasks )
+        
     user_choice = inquirer.prompt(options)['complete_task']
 
     if user_choice == "CANCEL":
@@ -127,8 +125,6 @@ def complete_task():
         tasks.remove("CANCEL")
 
     open_and_write(constants.TASKSCSV, tasks)
-
-    #Task Completed
     print(UP.task_completed)
     navigation()
 
@@ -137,16 +133,8 @@ def delete_task():
     """Removes Task from List"""
     tasks = tasks = open_and_read(constants.TASKSCSV)
     tasks.append("CANCEL")
-
-    #View Tasks Nav
-    options = [inquirer.List( 
-        "delete_task",
-        message="\033[1m Select Action: \033[0m ",
-        choices = tasks
-        )]
-
+    options = generate_options_list("delete_task", UP.select_action, tasks )
     user_choice = inquirer.prompt(options)['delete_task']
-
     if user_choice == "CANCEL":
         navigation()
     else:
@@ -161,17 +149,11 @@ def delete_task():
 
 
 def update_task():
-
+    """Updates task in List"""
     tasks = open_and_read(constants.TASKSCSV)
     tasks.append("CANCEL")
-    
-    #Update Tasks Nav
-    options = [inquirer.List( 
-        "update_task",
-        message="\033[1m  Select Action: \033[0m ",
-        choices = tasks
-        )]
 
+    options = generate_options_list("update_task", UP.select_action,tasks)
     user_choice = inquirer.prompt(options)['update_task']
     if user_choice == "CANCEL":
         navigation()
@@ -186,13 +168,11 @@ def update_task():
         task_data= inquirer.prompt(task_prompt)[Step_dict[step]["title"]]
         user_choice[i] = task_data
         i+=1
+        
     print(UP.task_updated)
     open_and_write(constants.TASKSCSV, tasks)
     navigation()
-    # Update Task
-    #with open('tasks.csv', 'a') as f:
-       ## writer = csv.writer(f)
-       # writer.writerow(task)
+   
 
 if __name__ == "__main__":
     main()

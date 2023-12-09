@@ -114,3 +114,8 @@ update_task_step4 = '''
     and press enter to save and move to the next step.
     '''
 view_task_title = " \033[1m Task List \033[0m"
+
+select_action = "\033[1m  Select Action: \033[0m "
+
+choiceList=["View Tasks", "Add Task", "Complete Task", "Update Task", "Delete Task", "Exit"]
+
