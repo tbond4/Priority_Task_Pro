@@ -7,6 +7,7 @@ startup ='''
     already entered. Use the Navigation menu below using the arrows keys on your keyboard, 
     when the option you want is highlighted, press enter to select.
     '''
+
 new_feature_box = '''
         ---------------------------------------------------------
         \033[1m New Feature \033[0m
@@ -14,6 +15,7 @@ new_feature_box = '''
         ---------------------------------------------------------
         '''
 exit_program = "Exiting Program, your tasks are awaiting!"
+
 task_completed = '''
     \033[1m Task Completed! \033[0m 
 
@@ -111,3 +113,4 @@ update_task_step4 = '''
     press enter to leave it the same or change it 
     and press enter to save and move to the next step.
     '''
+view_task_title = " \033[1m Task List \033[0m"

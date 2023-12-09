@@ -3,6 +3,7 @@ import csv
 import time
 import Steps
 import User_prompts as UP
+import constants
 
 def main():
     """Introduce program and start Navigation"""
@@ -35,11 +36,21 @@ def navigation():
     else:
         print("Please make a selection")
 
+def open_and_read(file):
+    tasks =[]
+    with open(file, 'r') as f:
+        csv_reader = csv.reader(f)
+        for task in csv_reader:
+            tasks.append(task)
+    return(tasks)
+
+def open_and_write(file,list):
+    with open(file, 'w') as f:
+        writer = csv.writer(f)
+        writer.writerows(list)
 
 def prioritize_tasks(tasks):
     """Use Microservice to get priority scores in oreded list"""
-    prioritied_tasks = []
-
     # Send Task List
     with open('../CS-361-Task-List-Microservice/tasks.txt','w') as f:
         for line in tasks:
@@ -48,25 +59,15 @@ def prioritize_tasks(tasks):
 
     # Read priority
     time.sleep(1)
-    with open('../CS-361-Task-List-Microservice/prioritized_tasks.txt','r') as f:
-        csv_reader = csv.reader(f)
-        for line in csv_reader:
-            prioritied_tasks.append(line)
-    return(prioritied_tasks)
+    return(open_and_read(constants.MICROSERVICEFILE))
 
 
 def view_tasks():
     """Display current Priortized Task List"""
 
-    print(" \033[1m Task List \033[0m")
-    tasks =[]
+    print(UP.view_task_title)
+    tasks = tasks = open_and_read(constants.TASKSCSV)
     title = ["Priority score", "Task"]
-
-    #Read CSV
-    with open('tasks.csv', 'r') as f:
-        csv_reader = csv.reader(f)
-        for line in csv_reader:
-            tasks.append(line)
 
     print("Prioritizing in progress...")
     prioritized_tasks = prioritize_tasks(tasks)
@@ -80,9 +81,11 @@ def view_tasks():
 
 def add_task():
     """Get user input to add a task to the list"""
+    tasks = open_and_read(constants.TASKSCSV)
     task =[]
     # Get User input
     Step_dict = Steps.add_task_steps
+
     for step in Step_dict:
         print(Step_dict[step]["intro"])
         task_prompt = [inquirer.Text(Step_dict[step]["title"], message=Step_dict[step]["message"])]
@@ -90,9 +93,8 @@ def add_task():
         task.append(task_data)
 
     #Add Task
-    with open('tasks.csv', 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(task)
+    tasks.append(task)
+    open_and_write(constants.TASKSCSV, tasks)
 
     print(UP.task_added)
     navigation()
@@ -106,13 +108,7 @@ def user_exit():
 
 def complete_task():
     """Removes Task from List"""
-    tasks =[]
-
-    #Read CSV
-    with open('tasks.csv', 'r') as f:
-        csv_reader = csv.reader(f)
-        for task in csv_reader:
-            tasks.append(task)
+    tasks = open_and_read(constants.TASKSCSV)
     tasks.append("CANCEL")
 
     #View Tasks Nav
@@ -129,10 +125,8 @@ def complete_task():
     else:
         tasks.remove(user_choice)
         tasks.remove("CANCEL")
-   
-    with open('tasks.csv', 'w') as f:
-        writer = csv.writer(f)
-        writer.writerows(tasks)
+
+    open_and_write(constants.TASKSCSV, tasks)
 
     #Task Completed
     print(UP.task_completed)
@@ -141,12 +135,7 @@ def complete_task():
 
 def delete_task():
     """Removes Task from List"""
-    tasks =[]
-    #Read CSV
-    with open('tasks.csv', 'r') as f:
-        csv_reader = csv.reader(f)
-        for task in csv_reader:
-            tasks.append(task)
+    tasks = tasks = open_and_read(constants.TASKSCSV)
     tasks.append("CANCEL")
 
     #View Tasks Nav
@@ -163,11 +152,8 @@ def delete_task():
     else:
         tasks.remove(user_choice)
         tasks.remove("CANCEL")
-   
-   
-    with open('tasks.csv', 'w') as f:
-        writer = csv.writer(f)
-        writer.writerows(tasks)
+
+    open_and_write(constants.TASKSCSV, tasks)
 
     #Task Completed
     print(UP.task_deleted)
@@ -175,13 +161,8 @@ def delete_task():
 
 
 def update_task():
-    tasks =[]
-    #Read CSV
-    with open('tasks.csv', 'r') as f:
-        csv_reader = csv.reader(f)
-        for task in csv_reader:
-            tasks.append(task)
 
+    tasks = open_and_read(constants.TASKSCSV)
     tasks.append("CANCEL")
     
     #Update Tasks Nav
@@ -196,7 +177,7 @@ def update_task():
         navigation()
 
     tasks.remove("CANCEL")
-   
+
     Step_dict = Steps.update_task_steps
     i = 0
     for step in Step_dict:
@@ -205,22 +186,13 @@ def update_task():
         task_data= inquirer.prompt(task_prompt)[Step_dict[step]["title"]]
         user_choice[i] = task_data
         i+=1
-
-    # Update Task
-    with open('tasks.csv', 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow(task)
-    
-    
     print(UP.task_updated)
-
-    with open('tasks.csv', 'w') as f:
-        writer = csv.writer(f)
-        writer.writerows(tasks)
-
+    open_and_write(constants.TASKSCSV, tasks)
     navigation()
-
-
+    # Update Task
+    #with open('tasks.csv', 'a') as f:
+       ## writer = csv.writer(f)
+       # writer.writerow(task)
 
 if __name__ == "__main__":
     main()
